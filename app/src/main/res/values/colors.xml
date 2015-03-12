@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="points">#f02080</color>
+    <color name="highscore">#a080f0</color>
+    <color name="round">#8020f0</color>
+    <color name="title">#409020</color>
+    <color name="shadow">#a0d0f0d0</color>
+    <color name="button">#f0a000</color>
+    <color name="button_light">#ffffdd</color>
+    <color name="back">#80b0ff</color>
+    <color name="back_light">#bbeeff</color>
+    <color name="black_transparent">#80000000</color>
+</resources>

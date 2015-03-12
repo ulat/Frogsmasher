@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:id="@+id/container">
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="000000"
+        android:id="@+id/points"
+        android:layout_gravity="left|top"
+        android:textColor="@color/points" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="000000"
+        android:id="@+id/highscore"
+        android:layout_gravity="center|top"
+        android:textColor="@color/highscore" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/round"
+        android:layout_gravity="right|top"
+        android:textColor="@color/round" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00000"
+        android:id="@+id/countdown"
+        android:layout_gravity="center_horizontal|bottom"
+        android:textColor="@color/points" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\?"
+        android:id="@+id/help"
+        android:layout_gravity="left|bottom"
+        android:background="@drawable/button"
+        android:textColor="@color/title" />
+
+</FrameLayout>

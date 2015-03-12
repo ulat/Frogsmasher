@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Küsse den Frosch</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="hello_world">Hello world!</string><string name="start">Start</string><string name="gameover">Game Over</string><string name="play_again">Neues Spiel</string>
+    <string name="kissed">Kuss!</string>
+    <string name="tutorial">Schaffst du des den Frosch zu küssen, bevor es ein anderer tut?</string>
+    <string name="myAdUnitId">ca-app-pub-4530380280358492/2554528160</string>
+
+</resources>

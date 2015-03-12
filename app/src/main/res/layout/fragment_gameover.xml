@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gameover"
+        android:id="@+id/title"
+        android:layout_gravity="center"
+        android:textColor="@color/points"
+        android:textSize="48sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/play_again"
+        android:id="@+id/play_again"
+        android:background="@drawable/button"
+        android:layout_gravity="center"
+        android:textColor="@color/title" />
+
+    <com.google.android.gms.ads.AdView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gameOverAdView"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/myAdUnitId"/>
+
+</LinearLayout>

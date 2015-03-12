@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:textSize" >@dimen/text_size</item>
+        <item name="android:shadowColor">@color/shadow</item>
+        <item name="android:shadowRadius">5</item>
+    </style>
+
+</resources>
