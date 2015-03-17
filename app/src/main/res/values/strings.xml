@@ -8,10 +8,10 @@
     <string name="gameover">Game Over</string>
     <string name="play_again">Play Again</string>
     <string name="kissed">KISSED!</string>
-    <string name="tutorial">Squash the frog!</string>
+    <string name="tutorial">Squash the frog! But be aware, time shortens each level! Sounds from http://soundbible.com</string>
     <string name="myAdUnitId">ca-app-pub-4530380280358492/2554528160</string>
-    <string name="start_easy">Start easy game</string>
-    <string name="start_medium">start_medium_game</string>
-    <string name="start_hard">Start difficult game</string>
+    <string name="start_easy">easy cheesy</string>
+    <string name="start_medium">medium</string>
+    <string name="start_hard">real hard</string>
 
 </resources>

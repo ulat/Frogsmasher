@@ -3,6 +3,7 @@ package eaustria.net.findthebug;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Handler;
@@ -40,19 +41,79 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private boolean interstitialLoaded = false;
     private AdView mAdView;
     private double difficultyLevel = 1;
+    private MediaPlayer[] squashSounds;
+    private MediaPlayer[] backgroundMusic;
+    private MediaPlayer[] gameOverSounds;
+    private boolean playBackgroundMusic;
+    private boolean playSounds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ttf = Typeface.createFromAsset(getAssets(), "JandaManateeSolid.ttf");
+        playBackgroundMusic = true;
+        playSounds = true;
         ((TextView)findViewById(R.id.countdown)).setTypeface(ttf);
         ((TextView)findViewById(R.id.round)).setTypeface(ttf);
         ((TextView)findViewById(R.id.points)).setTypeface(ttf);
         ((TextView)findViewById(R.id.highscore)).setTypeface(ttf);
         ((TextView)findViewById(R.id.help)).setTypeface(ttf);
         findViewById(R.id.help).setOnClickListener(this);
+        prepareSoundDatabase();
+        if ( playBackgroundMusic ) playBackgroundMusic();
         showStartFragment();
+    }
+
+    private void prepareSoundDatabase() {
+        prepareSoundEffects();
+        prepareBackgroundMusic();
+        prepareGameOverSounds();
+    }
+
+    private void playBackgroundMusic() {
+        backgroundMusic[0].setLooping(false);
+        backgroundMusic[0].start();
+    }
+
+    private void prepareBackgroundMusic() {
+        backgroundMusic = new MediaPlayer[1];
+        backgroundMusic[0] = new MediaPlayer().create(this, R.raw.frogs);
+    }
+
+    private void prepareSoundEffects() {
+        squashSounds = new MediaPlayer[14];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                squashSounds[0] = new MediaPlayer().create(getBaseContext(), R.raw.blop2);
+                squashSounds[1] = new MediaPlayer().create(getBaseContext(), R.raw.tick2);
+                squashSounds[2] = new MediaPlayer().create(getBaseContext(), R.raw.woosh_mark);
+                squashSounds[3] = new MediaPlayer().create(getBaseContext(), R.raw.blop2);
+                squashSounds[4] = new MediaPlayer().create(getBaseContext(), R.raw.hole_punch);
+                squashSounds[5] = new MediaPlayer().create(getBaseContext(), R.raw.plop2);
+                squashSounds[6] = new MediaPlayer().create(getBaseContext(), R.raw.plop3);
+                squashSounds[7] = new MediaPlayer().create(getBaseContext(), R.raw.plop);
+                squashSounds[8] = new MediaPlayer().create(getBaseContext(), R.raw.punch);
+                squashSounds[9] = new MediaPlayer().create(getBaseContext(), R.raw.slap);
+                squashSounds[10] = new MediaPlayer().create(getBaseContext(), R.raw.smashing);
+                squashSounds[11] = new MediaPlayer().create(getBaseContext(), R.raw.tick);
+                squashSounds[12] = new MediaPlayer().create(getBaseContext(), R.raw.tick2);
+                squashSounds[13] = new MediaPlayer().create(getBaseContext(), R.raw.woosh_mark);
+            }
+        }).start();
+    }
+    
+    private void prepareGameOverSounds() {
+        gameOverSounds = new MediaPlayer[3];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                gameOverSounds[0] = new MediaPlayer().create(getBaseContext(), R.raw.evil_laugh_male_6);
+                gameOverSounds[1] = new MediaPlayer().create(getBaseContext(), R.raw.evil_laugh_male_9);
+                gameOverSounds[2] = new MediaPlayer().create(getBaseContext(), R.raw.evil_laugh_male_9_1);
+            }
+        }).start();
     }
 
     private void createAndLoadInterstitial() {
@@ -148,12 +209,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         ViewGroup container = (ViewGroup) findViewById(R.id.container);
         container.removeAllViews();
         container.addView(getLayoutInflater().inflate(R.layout.fragment_start, null));
-        container.findViewById(R.id.start).setOnClickListener(this);
+        container.findViewById(R.id.start_easy).setOnClickListener(this);
+        container.findViewById(R.id.start_medium).setOnClickListener(this);
+        container.findViewById(R.id.start_hard).setOnClickListener(this);
+
         ((TextView)findViewById(R.id.title)).setTypeface(ttf);
-        ((TextView)findViewById(R.id.start)).setTypeface(ttf);
+        ((TextView)findViewById(R.id.start_easy)).setTypeface(ttf);
+        ((TextView)findViewById(R.id.start_medium)).setTypeface(ttf);
+        ((TextView)findViewById(R.id.start_hard)).setTypeface(ttf);
     }
 
     private void showGameOverFragment() {
+        playGameOverSound();
         ViewGroup container = (ViewGroup) findViewById(R.id.container);
         container.addView( getLayoutInflater().inflate(R.layout.fragment_gameover, null) );
         container.findViewById(R.id.play_again).setOnClickListener(this);
@@ -173,10 +240,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
     }
 
+    private void playGameOverSound() {
+        if ( playSounds ) gameOverSounds[rnd.nextInt(gameOverSounds.length)].start();
+    }
+
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.start_easy) {
             startGame(Difficulty.easy);
+        } else if(view.getId()==R.id.start_medium) {
+            startGame(Difficulty.medium);
+        } else if(view.getId()==R.id.start_hard) {
+            startGame(Difficulty.hard);
         } else if(view.getId()==R.id.play_again) {
             showStartFragment();
         } else if(view.getId()==R.id.frog) {
@@ -188,10 +263,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void kissFrog() {
         handler.removeCallbacks(runnable);
-        showToast(R.string.kissed);
+        playSquashSound();
+        showToast(R.string.kissed);        
         points += countdown*1000;
         round++;
         initRound();
+    }
+
+    private void playSquashSound() {
+        if ( playSounds ) squashSounds[rnd.nextInt(squashSounds.length)].start();
     }
 
     private void showToast(int stringResId) {
