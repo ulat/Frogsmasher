@@ -13,5 +13,9 @@
     <string name="start_easy">easy cheesy</string>
     <string name="start_medium">medium</string>
     <string name="start_hard">real hard</string>
+    <string name="points">P</string>
+    <string name="highscore">Max</string>
+    <string name="level">Level</string>
+    <string name="time">Remaining</string>
 
 </resources>

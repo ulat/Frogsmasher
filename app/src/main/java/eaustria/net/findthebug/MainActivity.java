@@ -193,11 +193,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void update() {
-        fillTextView(R.id.points, Integer.toString(points)+" ");
+        fillTextView(R.id.points, getString(R.string.points)+ ":" + Integer.toString(points));
         loadHighscore();
-        fillTextView(R.id.highscore, Integer.toString(highscore));
-        fillTextView(R.id.round, " "+Integer.toString(round));
-        fillTextView(R.id.countdown, Integer.toString(countdown*1000)+" ");
+        fillTextView(R.id.highscore, getString(R.string.highscore) + ":" + Integer.toString(highscore));
+        fillTextView(R.id.round, " "+ getString(R.string.level) + ":" + Integer.toString(round));
+        fillTextView(R.id.countdown, getString(R.string.time) + ":" + Integer.toString(countdown*1000)+" ");
     }
 
     private void fillTextView(int id, String text) {
