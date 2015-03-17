@@ -24,8 +24,8 @@ public class WimmelView extends View {
             R.drawable.distract5,R.drawable.distract6,
             R.drawable.distract7, R.drawable.distract8};
 
-    public void setImageCount(int imageCount) {
-        this.imageCount = imageCount;
+    public void setImageCount(double imageCount) {
+        this.imageCount = (int) Math.round(imageCount);
         randomSeed = System.currentTimeMillis();
         invalidate();
     }

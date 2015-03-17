@@ -39,6 +39,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private InterstitialAd interstitial;
     private boolean interstitialLoaded = false;
     private AdView mAdView;
+    private double difficultyLevel = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +115,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         container.removeAllViews();
         WimmelView wv = new WimmelView(this);
         container.addView(wv, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        wv.setImageCount(8*(10+round));
+        wv.setImageCount(8*(10+round)*difficultyLevel);
         frog = new ImageView(this);
         frog.setId(R.id.frog);
         frog.setImageResource(R.drawable.frog);
@@ -174,8 +175,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if(view.getId()==R.id.start) {
-            startGame();
+        if(view.getId()==R.id.start_easy) {
+            startGame(Difficulty.easy);
         } else if(view.getId()==R.id.play_again) {
             showStartFragment();
         } else if(view.getId()==R.id.frog) {
@@ -215,13 +216,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                startGame();
+                startGame(Difficulty.medium);
             }
         });
         dialog.show();
     }
 
-    private void startGame() {
+    private void startGame(Difficulty difficulty) {
+        switch (difficulty) {
+            case easy:
+                this.difficultyLevel = 0.75;
+                break;
+            case medium:
+                this.difficultyLevel = 1;
+                break;
+            case hard:
+                this.difficultyLevel = 1.75;
+                break;
+        }
         newGame();
     }
 

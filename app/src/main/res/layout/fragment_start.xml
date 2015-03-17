@@ -24,8 +24,24 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start"
-        android:id="@+id/start"
+        android:text="@string/start_easy"
+        android:id="@+id/start_easy"
+        android:background="@drawable/button"
+        android:layout_gravity="center"
+        android:textColor="@color/title" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_medium"
+        android:id="@+id/start_medium"
+        android:background="@drawable/button"
+        android:layout_gravity="center"
+        android:textColor="@color/title" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_hard"
+        android:id="@+id/start_hard"
         android:background="@drawable/button"
         android:layout_gravity="center"
         android:textColor="@color/title" />
