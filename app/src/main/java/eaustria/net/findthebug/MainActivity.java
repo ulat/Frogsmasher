@@ -2,8 +2,11 @@ package eaustria.net.findthebug;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Handler;
@@ -21,6 +24,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
+import org.w3c.dom.Text;
+
 import java.util.Random;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -29,6 +34,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final int FROG_ID = 212121;
     private static final int ROUND_TIME = 10;
+    private static final String BACKGROUND_MUSIC = "BACKGROUND_MUSIC";
+    private static final String SOUND_EFFECTS = "SOUND_EFFECTS";
     private int points;
     private int round;
     private int countdown;
@@ -50,19 +57,34 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createAndLoadInterstitial();
         setContentView(R.layout.activity_main);
         ttf = Typeface.createFromAsset(getAssets(), "JandaManateeSolid.ttf");
-        playBackgroundMusic = true;
-        playSounds = true;
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+
+        playBackgroundMusic = sp.getBoolean(BACKGROUND_MUSIC, false);
+        playSounds = sp.getBoolean(SOUND_EFFECTS, false);
+        setMusicLogo(playBackgroundMusic);
+
         ((TextView)findViewById(R.id.countdown)).setTypeface(ttf);
         ((TextView)findViewById(R.id.round)).setTypeface(ttf);
         ((TextView)findViewById(R.id.points)).setTypeface(ttf);
         ((TextView)findViewById(R.id.highscore)).setTypeface(ttf);
         ((TextView)findViewById(R.id.help)).setTypeface(ttf);
         findViewById(R.id.help).setOnClickListener(this);
+        findViewById(R.id.music).setOnClickListener(this);
         prepareSoundDatabase();
         if ( playBackgroundMusic ) playBackgroundMusic();
         showStartFragment();
+    }
+
+    private void setMusicLogo(boolean musicOnOff) {
+        TextView music = (TextView) findViewById(R.id.music);
+            if (musicOnOff) {
+                music.setBackgroundResource(R.drawable.music_64);
+            } else {
+                music.setBackgroundResource(R.drawable.music_off_64);
+            }
     }
 
     private void prepareSoundDatabase() {
@@ -117,6 +139,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void createAndLoadInterstitial() {
+        createInterstitual();
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AdRequest.Builder builder = new AdRequest.Builder();
+                builder.addTestDevice("F708B3D263B7BAED98419BB27EAB4F76");
+                AdRequest adRequest = builder.build();
+                interstitial.loadAd(adRequest);
+                Log.d(TAG, "Loading Ads...");
+            }
+        });
+
+        runOnUiThread(thread);
+/*
+        try {
+            thread.join(5000);
+        } catch (InterruptedException e) {
+            Log.d(TAG, e.getLocalizedMessage());
+        }
+*/
+        if (interstitial == null) throw new AssertionError();
+    }
+
+    private void createInterstitual() {
         interstitial = new InterstitialAd(this);
         interstitial.setAdUnitId(getString(R.string.myAdUnitId));
         interstitial.setAdListener(new AdListener() {
@@ -130,22 +177,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Log.d(TAG, "Could not load interstitial ads");
             }
         });
-
-        runOnUiThread(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AdRequest.Builder builder = new AdRequest.Builder();
-                builder.addTestDevice("F708B3D263B7BAED98419BB27EAB4F76");
-                AdRequest adRequest = builder.build();
-                interstitial.loadAd(adRequest);
-                Log.d(TAG, "Loading Ads...");
-            }
-        }));
-        if (interstitial == null) throw new AssertionError();
-        if ( interstitialLoaded )
-            interstitial.show();
-        else
-            Log.d(TAG, "Could not show interstitital as ad has not yet been loaded....");
     }
 
     private void loadHighscore() {
@@ -165,7 +196,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void newGame() {
         points=0;
         round=1;
-        createAndLoadInterstitial();
+        if ( interstitialLoaded )
+            interstitial.show();
+        else
+            Log.d(TAG, "Could not show interstitital as ad has not yet been loaded....");
         initRound();
     }
 
@@ -258,6 +292,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             kissFrog();
         } else if(view.getId()==R.id.help) {
             showTutorial();
+        } else if(view.getId()==R.id.music) {
+            toggleMusic();
         }
     }
 
@@ -300,6 +336,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         });
         dialog.show();
+    }
+
+    private void toggleMusic() {
+        playBackgroundMusic = !playBackgroundMusic;
+        playSounds = !playSounds;
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor e = sp.edit();
+        e.putBoolean(BACKGROUND_MUSIC, playBackgroundMusic);
+        e.putBoolean(SOUND_EFFECTS, playSounds);
+        e.commit();
+        setMusicLogo(playBackgroundMusic);
+        for (MediaPlayer mediaPlayer : backgroundMusic) {
+            if (mediaPlayer.isPlaying())
+                mediaPlayer.stop();
+        }
+        Toast.makeText(this, "Music changed", Toast.LENGTH_LONG).show();
     }
 
     private void startGame(Difficulty difficulty) {

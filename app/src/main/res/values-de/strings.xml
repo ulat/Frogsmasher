@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Küsse den Frosch</string>
+    <string name="app_name">Frog Smasher</string>
     <string name="action_settings">Einstellungen</string>
     <string name="hello_world">Hello world!</string><string name="start">Start</string><string name="gameover">Game Over</string><string name="play_again">Neues Spiel</string>
-    <string name="kissed">Kuss!</string>
-    <string name="tutorial">Finde und klicke den Frosch! In jedem Level wird die Zeit knapper.... Sounds from http://soundbible.com</string>
+    <string name="kissed">SMASHED!</string>
+    <string name="tutorial">Finde und klicke den Frosch! In jedem Level wird die Zeit knapper.... Sounds from http://soundbible.com Startgrafik unter freier Lizenz von Hatam in Vector Art</string>
     <string name="myAdUnitId">ca-app-pub-4530380280358492/2554528160</string>
     <string name="start_easy">Leicht</string>
     <string name="start_medium">Standard</string>
@@ -13,5 +13,8 @@
     <string name="points">P</string>
     <string name="highscore">Max</string>
     <string name="time">Zeit</string>
+    <string name="music_prefs">Sounds ein / aus</string>
+    <string name="toggleMusic">ein/aus</string>
+    <string name="level">Level</string>
 
 </resources>
