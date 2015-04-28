@@ -23,6 +23,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.purplebrain.adbuddiz.sdk.AdBuddiz;
 
 import org.w3c.dom.Text;
 
@@ -57,7 +58,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createAndLoadInterstitial();
+        //interstitial = new InterstitialAd(this);
+        //createAndLoadInterstitial();
+
+        prepareAdBuddiz();
+
         setContentView(R.layout.activity_main);
         ttf = Typeface.createFromAsset(getAssets(), "JandaManateeSolid.ttf");
         SharedPreferences sp = getPreferences(MODE_PRIVATE);
@@ -76,6 +81,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         prepareSoundDatabase();
         if ( playBackgroundMusic ) playBackgroundMusic();
         showStartFragment();
+    }
+
+    private void prepareAdBuddiz() {
+        //AdBuddiz.setTestModeActive();
+        AdBuddiz.setPublisherKey("3231c959-1b0e-4e03-ae32-dd3207cd10d1");
+        AdBuddiz.cacheAds(this);
     }
 
     private void setMusicLogo(boolean musicOnOff) {
@@ -145,7 +156,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             public void run() {
                 AdRequest.Builder builder = new AdRequest.Builder();
-                builder.addTestDevice("F708B3D263B7BAED98419BB27EAB4F76");
+               // builder.addTestDevice("F708B3D263B7BAED98419BB27EAB4F76");
+               // builder.addTestDevice("208BBE82731D1C007606A921430F352A");
                 AdRequest adRequest = builder.build();
                 interstitial.loadAd(adRequest);
                 Log.d(TAG, "Loading Ads...");
@@ -153,18 +165,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
 
         runOnUiThread(thread);
-/*
-        try {
-            thread.join(5000);
-        } catch (InterruptedException e) {
-            Log.d(TAG, e.getLocalizedMessage());
-        }
-*/
         if (interstitial == null) throw new AssertionError();
     }
 
     private void createInterstitual() {
-        interstitial = new InterstitialAd(this);
+        //interstitial = new InterstitialAd(this);
         interstitial.setAdUnitId(getString(R.string.myAdUnitId));
         interstitial.setAdListener(new AdListener() {
             @Override
@@ -196,15 +201,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void newGame() {
         points=0;
         round=1;
-        if ( interstitialLoaded )
-            interstitial.show();
-        else
-            Log.d(TAG, "Could not show interstitital as ad has not yet been loaded....");
+//        if ( interstitialLoaded )
+//            interstitial.show();
+//        else
+//            Log.d(TAG, "Could not show interstitital as ad has not yet been loaded....");
         initRound();
     }
 
     private void initRound() {
         Log.d(TAG, "enter initRound");
+
+        if (round == 1 || rnd.nextBoolean())
+            showAdBuddizAdd();
         countdown = ROUND_TIME;
         ViewGroup container = (ViewGroup) findViewById(R.id.container);
         container.removeAllViews();
@@ -224,6 +232,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         container.addView(frog, lp);
         update();
         handler.postDelayed(runnable,1000-round*50);
+    }
+
+    private void showAdBuddizAdd() {
+        AdBuddiz.showAd(this);
     }
 
     private void update() {
