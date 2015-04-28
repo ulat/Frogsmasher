@@ -218,7 +218,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         container.removeAllViews();
         WimmelView wv = new WimmelView(this);
         container.addView(wv, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        wv.setImageCount(8*(10+round)*difficultyLevel);
+        wv.setImageCount((10+round)*difficultyLevel);
         frog = new ImageView(this);
         frog.setId(R.id.frog);
         frog.setImageResource(R.drawable.frog);
