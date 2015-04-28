@@ -16,5 +16,6 @@
     <string name="music_prefs">Sounds ein / aus</string>
     <string name="toggleMusic">ein/aus</string>
     <string name="level">Level</string>
+    <string name="kissedBonusCat">Bonuspunkte</string>
 
 </resources>

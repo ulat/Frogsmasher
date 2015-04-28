@@ -19,5 +19,6 @@
     <string name="time">Remaining</string>
     <string name="music_prefs">Sounds on / off</string>
     <string name="toggleMusic">on/off</string>
+    <string name="kissedBonusCat">Bonuspoints</string>
 
 </resources>

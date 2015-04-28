@@ -18,4 +18,5 @@
     <string name="time">Remaining</string>
     <string name="toggleMusic">on/off</string>
     <string name="tutorial">Squash the frog! But be aware, time shortens each level! Sounds from http://soundbible.com Icon based on free license by Hatam in Vector Art</string>
+    <string name="kissedBonusCat">Bonuspoints</string>
 </resources>
