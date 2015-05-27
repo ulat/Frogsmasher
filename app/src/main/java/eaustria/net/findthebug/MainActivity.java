@@ -2,11 +2,8 @@ package eaustria.net.findthebug;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Handler;
@@ -25,8 +22,6 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.purplebrain.adbuddiz.sdk.AdBuddiz;
 
-import org.w3c.dom.Text;
-
 import java.util.Random;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -37,6 +32,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private static final int ROUND_TIME = 10;
     private static final String BACKGROUND_MUSIC = "BACKGROUND_MUSIC";
     private static final String SOUND_EFFECTS = "SOUND_EFFECTS";
+    private static final int BONUSPOINT_CAT = 5000;
     private int points;
     private int round;
     private int countdown;
@@ -54,6 +50,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private MediaPlayer[] gameOverSounds;
     private boolean playBackgroundMusic;
     private boolean playSounds;
+    private ImageView bonusCat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,20 +215,51 @@ public class MainActivity extends Activity implements View.OnClickListener {
         container.removeAllViews();
         WimmelView wv = new WimmelView(this);
         container.addView(wv, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        wv.setImageCount((10+round)*difficultyLevel);
+        wv.setImageCount(40+(10+round)*difficultyLevel);
         frog = new ImageView(this);
         frog.setId(R.id.frog);
         frog.setImageResource(R.drawable.frog);
         frog.setScaleType(ImageView.ScaleType.CENTER);
         float scale = getResources().getDisplayMetrics().density;
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(Math.round(64*scale),Math.round(61*scale));
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(Math.round(64*scale),
+                                                                    Math.round(61*scale));
         lp.gravity = Gravity.TOP + Gravity.LEFT;
         lp.leftMargin = rnd.nextInt(container.getWidth()-64);
         lp.topMargin = rnd.nextInt(container.getHeight()-61);
         frog.setOnClickListener(this);
         container.addView(frog, lp);
+
+
+        if (rnd.nextBoolean()) {
+            FrameLayout.LayoutParams lpCat = new FrameLayout.LayoutParams(Math.round(64*scale),
+                                                                           Math.round(64*scale));
+            lpCat.gravity = Gravity.TOP + Gravity.LEFT;
+            do {
+                lpCat.leftMargin = rnd.nextInt(container.getWidth() - 64);
+                lpCat.topMargin = rnd.nextInt(container.getHeight() - 64);
+            } while (imageViewOverlaps(lpCat, lp, 64, 61));
+            showBonusCat(container, lpCat);
+            Log.d(TAG, "showBonusCat");
+        }
         update();
         handler.postDelayed(runnable,1000-round*50);
+    }
+
+    private boolean imageViewOverlaps(FrameLayout.LayoutParams lp1, FrameLayout.LayoutParams lp2,
+                                      int imageWidth, int imageHeight) {
+        return Math.abs(lp1.leftMargin - lp2.leftMargin) < imageWidth  &&
+                Math.abs(lp1.topMargin - lp2.topMargin) < imageHeight;
+
+    }
+
+    private void showBonusCat(ViewGroup viewGroup, FrameLayout.LayoutParams layoutParams) {
+        bonusCat = new ImageView(this);
+        bonusCat.setId(R.id.bonuscat);
+        bonusCat.setImageResource(R.drawable.bonuscat);
+        bonusCat.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        bonusCat.setOnClickListener(this);
+        viewGroup.addView(bonusCat, layoutParams);
     }
 
     private void showAdBuddizAdd() {
@@ -292,21 +320,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if(view.getId()==R.id.start_easy) {
+        if (view.getId() == R.id.start_easy) {
             startGame(Difficulty.easy);
-        } else if(view.getId()==R.id.start_medium) {
+        } else if (view.getId() == R.id.start_medium) {
             startGame(Difficulty.medium);
-        } else if(view.getId()==R.id.start_hard) {
+        } else if (view.getId() == R.id.start_hard) {
             startGame(Difficulty.hard);
-        } else if(view.getId()==R.id.play_again) {
+        } else if (view.getId() == R.id.play_again) {
             showStartFragment();
-        } else if(view.getId()==R.id.frog) {
+        } else if (view.getId() == R.id.frog) {
             kissFrog();
-        } else if(view.getId()==R.id.help) {
+        } else if (view.getId() == R.id.help) {
             showTutorial();
-        } else if(view.getId()==R.id.music) {
+        } else if (view.getId() == R.id.music) {
             toggleMusic();
+        } else if (view.getId() == R.id.bonuscat) {
+            kissBonusCat(BONUSPOINT_CAT);
         }
+    }
+
+    private void kissBonusCat(int bonuspoint) {
+        points += bonuspoint;
+        fillTextView(R.id.points, getString(R.string.points)+ ":" + Integer.toString(points));
+        ViewGroup container = (ViewGroup) findViewById(R.id.container);
+        ImageView bonusCat = (ImageView) findViewById(R.id.bonuscat);
+        container.removeView(bonusCat);
+        showToast(R.string.kissedBonusCat);
     }
 
     private void kissFrog() {
@@ -317,6 +356,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         round++;
         initRound();
     }
+
 
     private void playSquashSound() {
         if ( playSounds ) squashSounds[rnd.nextInt(squashSounds.length)].start();

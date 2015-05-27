@@ -6,10 +6,10 @@ android {
 
     defaultConfig {
         applicationId "eaustria.net.findthebug"
-        minSdkVersion 16
+        minSdkVersion 9
         targetSdkVersion 21
-        versionCode 5
-        versionName "1.0.1"
+        versionCode 9
+        versionName "1.1"
     }
     buildTypes {
         release {

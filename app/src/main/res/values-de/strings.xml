@@ -5,7 +5,7 @@
     <string name="action_settings">Einstellungen</string>
     <string name="hello_world">Hello world!</string><string name="start">Start</string><string name="gameover">Game Over</string><string name="play_again">Neues Spiel</string>
     <string name="kissed">SMASHED!</string>
-    <string name="tutorial">Finde und klicke den Frosch! In jedem Level wird die Zeit knapper.... Sounds from http://soundbible.com Startgrafik unter freier Lizenz von Hatam in Vector Art</string>
+    <string name="tutorial">Klicke den Frosch und die Bonuskatze! In jedem Level wird die Zeit knapper.... Sounds from http://soundbible.com Startgrafik unter freier Lizenz von Hatam in Vector Art</string>
     <string name="myAdUnitId">ca-app-pub-4530380280358492/2554528160</string>
     <string name="start_easy">Leicht</string>
     <string name="start_medium">Standard</string>
